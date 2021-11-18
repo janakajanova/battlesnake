@@ -1,4 +1,4 @@
-import random
+import random, itertools
 from typing import List, Dict
 
 """
@@ -59,6 +59,21 @@ def avoid_body(my_head: Dict[str, int], my_body: List[Dict[str, int]],possible_m
   possible_moves = list(possible_moves_set)
   return possible_moves
 
+def avoid_snakes(my_head: Dict[str, int], snakes: List[Dict[str, int]],possible_moves: List[str]) -> List[str]:
+  possible_moves_set = set(possible_moves)
+
+  if {"x":my_head["x"] - 1, "y":my_head["y"]} in snakes:
+    possible_moves_set.discard("left")
+  if {"x":my_head["x"] + 1, "y":my_head["y"]} in snakes:
+    possible_moves_set.discard("right")
+  if {"x":my_head["x"], "y":my_head["y"] + 1} in snakes:
+    possible_moves_set.discard("up")
+  if {"x":my_head["x"], "y":my_head["y"] - 1} in snakes:
+    possible_moves_set.discard("down")
+
+  possible_moves = list(possible_moves_set)
+  return possible_moves
+
 def choose_move(data: dict) -> str:
     """
     data: Dictionary of all Game Board data as received from the Battlesnake Engine.
@@ -89,14 +104,18 @@ def choose_move(data: dict) -> str:
     height = data["board"]["height"]
     width = data["board"]["width"]
 
-    possible_moves = avoid_walls(my_head, possible_moves,height,width)
+    possible_moves = avoid_walls(my_head, possible_moves, height, width)
 
 
     # TODO Using information from 'data', don't let your Battlesnake pick a move that would hit its own body
 
-    possible_moves = avoid_body(my_head, my_body,possible_moves)
+    possible_moves = avoid_body(my_head, my_body, possible_moves)
 
     # TODO: Using information from 'data', don't let your Battlesnake pick a move that would collide with another Battlesnake
+
+    snakes_tmp = [x["body"] for x in data["board"]["snakes"]]
+    snakes = list(itertools.chain(*snakes_tmp))
+    possible_moves = avoid_snakes(my_head, snakes, possible_moves)
 
     # TODO: Using information from 'data', make your Battlesnake move towards a piece of food on the board
 
