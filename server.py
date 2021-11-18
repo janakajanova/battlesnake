@@ -24,10 +24,10 @@ def handle_info():
     print("INFO")
     return {
         "apiversion": "1",
-        "author": "",  # TODO: Your Battlesnake Username
-        "color": "#888888",  # TODO: Personalize
-        "head": "default",  # TODO: Personalize
-        "tail": "default",  # TODO: Personalize
+        "author": "JanaKa",  # TODO: Your Battlesnake Username
+        "color": "#76D7C4",  # TODO: Personalize
+        "head": "silly",  # TODO: Personalize
+        "tail": "flake",  # TODO: Personalize
     }
 
 
